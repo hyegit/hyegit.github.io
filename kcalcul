@@ -1,466 +1,460 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>위촉 가능 여부 나이 계산기</title>
-<!-- Pretendard 글꼴 로드 -->
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<style>
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-}
-
-```
-    body {
-        background-color: #ffffff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 20px;
-        color: #333;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 400px;
-        padding: 24px;
-    }
-
-    .input-group {
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    /* 라벨 폰트 크기 */
-    .input-group label {
-        display: block;
-        font-size: 16.5px;
-        font-weight: 700;
-        margin-bottom: 8px;
-        color: #333;
-    }
-
-    /* 입력창 스타일 */
-    .input-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .input-wrapper input[type="text"] {
-        width: 100%;
-        padding: 13px 14px;
-        padding-right: 40px;
-        font-size: 16px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        outline: none;
-        transition: border-color 0.2s;
-        font-family: inherit;
-        background-color: #ffffff;
-        cursor: pointer;
-    }
-
-    .input-wrapper input[type="text"]:focus {
-        border-color: #a1a1aa;
-    }
-
-    /* 오른쪽 아이콘 */
-    .calendar-icon {
-        position: absolute;
-        right: 14px;
-        width: 20px;
-        height: 20px;
-        fill: #777;
-        pointer-events: none;
-    }
-
-    /* 드롭다운 패널 스타일 */
-    .picker-panel {
-        display: none;
-        position: absolute;
-        top: calc(100% + 6px);
-        left: 0;
-        right: 0;
-        background-color: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        padding: 16px;
-        z-index: 10;
-    }
-
-    .picker-panel.active {
-        display: block;
-    }
-
-    .select-row {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-
-    .select-row select {
-        flex: 1;
-        padding: 10px;
-        font-size: 14px;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        outline: none;
-        background-color: #fff;
-        font-family: inherit;
-        cursor: pointer;
-    }
-
-    .select-row select:focus {
-        border-color: #a1a1aa;
-    }
-
-    /* 패널 확인 버튼 */
-    .btn-confirm {
-        width: 100%;
-        padding: 10px;
-        background-color: #333333;
-        color: #ffffff;
-        border: none;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-
-    .btn-confirm:hover {
-        background-color: #111111;
-    }
-
-    /* 기준일 하단 도움말 */
-    .help-text {
-        display: block;
-        font-size: 13px;
-        color: #888888;
-        margin-top: 8px;
-        line-height: 1.4;
-    }
-
-    /* 결과 영역 스타일 */
-    .result-box {
-        margin-top: 28px;
-        background-color: #F2F2F2;
-        padding: 24px 20px;
-        border-radius: 12px;
-        text-align: center;
-        font-size: 18px;
-        min-height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        word-break: keep-all;
-        line-height: 1.5;
-        overflow: hidden;
-    }
-
-    /* 위촉 가능 텍스트 스타일 */
-    .eligible {
-        color: #4DB848;
-        font-weight: 700;
-    }
-
-    /* 위촉 불가 텍스트 스타일 */
-    .ineligible {
-        color: #D94925;
-        font-weight: 700;
-    }
-
-    .empty-text {
-        color: #888;
-        font-size: 15px;
-        line-height: 1.6;
-    }
-
-    /* 위로 부드럽게 올라오는 애니메이션 */
-    @keyframes slideUpFade {
-        0% {
-            opacity: 0;
-            transform: translateY(12px);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>위촉 가능 여부 나이 계산기</title>
+    <!-- Pretendard 글꼴 로드 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
         }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
+        
+        body {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
         }
-    }
 
-    .animate-result {
-        animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-</style>
-```
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+        }
 
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* 라벨 폰트 크기 */
+        .input-group label {
+            display: block;
+            font-size: 16.5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        /* 입력창 스타일 */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .input-wrapper input[type="text"] {
+            width: 100%;
+            padding: 13px 14px;
+            padding-right: 40px;
+            font-size: 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .input-wrapper input[type="text"]:focus {
+            border-color: #a1a1aa;
+        }
+
+        /* 오른쪽 아이콘 */
+        .calendar-icon {
+            position: absolute;
+            right: 14px;
+            width: 20px;
+            height: 20px;
+            fill: #777;
+            pointer-events: none;
+        }
+
+        /* 드롭다운 패널 스타일 */
+        .picker-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            z-index: 10;
+        }
+
+        .picker-panel.active {
+            display: block;
+        }
+
+        .select-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .select-row select {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            outline: none;
+            background-color: #fff;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .select-row select:focus {
+            border-color: #a1a1aa;
+        }
+
+        /* 패널 확인 버튼 */
+        .btn-confirm {
+            width: 100%;
+            padding: 10px;
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-confirm:hover {
+            background-color: #111111;
+        }
+
+        /* 기준일 하단 도움말 */
+        .help-text {
+            display: block;
+            font-size: 13px;
+            color: #888888;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* 결과 영역 스타일 */
+        .result-box {
+            margin-top: 28px;
+            background-color: #F2F2F2;
+            padding: 24px 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 18px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: keep-all;
+            line-height: 1.5;
+            overflow: hidden;
+        }
+
+        /* 위촉 가능 텍스트 스타일 */
+        .eligible {
+            color: #4DB848;
+            font-weight: 700;
+        }
+
+        /* 위촉 불가 텍스트 스타일 */
+        .ineligible {
+            color: #D94925;
+            font-weight: 700;
+        }
+
+        .empty-text {
+            color: #888;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* 위로 부드럽게 올라오는 애니메이션 */
+        @keyframes slideUpFade {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-result {
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
 </head>
 <body>
 
-```
-<div class="container">
-    <!-- 생년월일 영역 -->
-    <div class="input-group" id="birthGroup">
-        <label for="birthDate">생년월일</label>
-        <div class="input-wrapper" id="birthWrapper">
-            <input type="text" id="birthDate" placeholder="생년월일을 입력해주세요." readonly>
-            <svg class="calendar-icon" xmlns="<http://www.w3.org/2000/svg>" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/></svg>
-        </div>
-        <!-- 커스텀 드롭다운 패널 -->
-        <div class="picker-panel" id="birthPanel">
-            <div class="select-row">
-                <select id="birthYear"><option value="">연도</option></select>
-                <select id="birthMonth"><option value="">월</option></select>
-                <select id="birthDay"><option value="">일</option></select>
+    <div class="container">
+        <!-- 생년월일 영역 -->
+        <div class="input-group" id="birthGroup">
+            <label for="birthDate">생년월일</label>
+            <div class="input-wrapper" id="birthWrapper">
+                <input type="text" id="birthDate" placeholder="생년월일을 입력해주세요." readonly>
+                <svg class="calendar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/></svg>
             </div>
-            <button type="button" class="btn-confirm" id="birthConfirm">확인</button>
-        </div>
-    </div>
-
-    <!-- 기준일 영역 -->
-    <div class="input-group" id="refGroup">
-        <label for="refDate">기준일</label>
-        <div class="input-wrapper" id="refWrapper">
-            <input type="text" id="refDate" placeholder="기준일을 입력해주세요." readonly>
-            <svg class="calendar-icon" xmlns="<http://www.w3.org/2000/svg>" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/></svg>
-        </div>
-        <!-- 커스텀 드롭다운 패널 -->
-        <div class="picker-panel" id="refPanel">
-            <div class="select-row">
-                <select id="refYear"><option value="">연도</option></select>
-                <select id="refMonth"><option value="">월</option></select>
-                <select id="refDay"><option value="">일</option></select>
+            <!-- 커스텀 드롭다운 패널 -->
+            <div class="picker-panel" id="birthPanel">
+                <div class="select-row">
+                    <select id="birthYear"><option value="">연도</option></select>
+                    <select id="birthMonth"><option value="">월</option></select>
+                    <select id="birthDay"><option value="">일</option></select>
+                </div>
+                <button type="button" class="btn-confirm" id="birthConfirm">확인</button>
             </div>
-            <button type="button" class="btn-confirm" id="refConfirm">확인</button>
         </div>
-        <span class="help-text">*위촉예정일을 입력하면 위촉일 기준 만 나이를 계산할 수 있습니다.</span>
+
+        <!-- 기준일 영역 -->
+        <div class="input-group" id="refGroup">
+            <label for="refDate">기준일</label>
+            <div class="input-wrapper" id="refWrapper">
+                <input type="text" id="refDate" placeholder="기준일을 입력해주세요." readonly>
+                <svg class="calendar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/></svg>
+            </div>
+            <!-- 커스텀 드롭다운 패널 -->
+            <div class="picker-panel" id="refPanel">
+                <div class="select-row">
+                    <select id="refYear"><option value="">연도</option></select>
+                    <select id="refMonth"><option value="">월</option></select>
+                    <select id="refDay"><option value="">일</option></select>
+                </div>
+                <button type="button" class="btn-confirm" id="refConfirm">확인</button>
+            </div>
+            <span class="help-text">*위촉예정일을 입력하면 위촉일 기준 만 나이를 계산할 수 있습니다.</span>
+        </div>
+
+        <!-- 결과 상자 -->
+        <div id="resultBox" class="result-box">
+            <!-- 초기 안내 문구 -->
+        </div>
     </div>
 
-    <!-- 결과 상자 -->
-    <div id="resultBox" class="result-box">
-        <!-- 초기 안내 문구 -->
-    </div>
-</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultBox = document.getElementById('resultBox');
+            const initialText = '생년월일을 입력하면<br>만 나이가 자동으로 계산됩니다.';
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const resultBox = document.getElementById('resultBox');
-        const initialText = '생년월일을 입력하면<br>만 나이가 자동으로 계산됩니다.';
+            // 호이스팅 문제 및 TDZ(Temporal Dead Zone) 에러 방지를 위해 변수 및 핵심 함수들을 선언 위치를 최상단으로 설정합니다.
+            let updateTimer;
 
-        // 호이스팅 문제 및 TDZ(Temporal Dead Zone) 에러 방지를 위해 변수 및 핵심 함수들을 선언 위치를 최상단으로 설정합니다.
-        let updateTimer;
-
-        // 초기 안내 문구 표시
-        function showEmpty() {
-            resultBox.innerHTML = `<span class="empty-text animate-result">${initialText}</span>`;
-        }
-
-        // 만나이 계산 및 결과 노출 함수
-        function calculateAndDisplayAge() {
-            const birthDateStr = document.getElementById('birthDate').value;
-            const refDateStr = document.getElementById('refDate').value;
-
-            if (!birthDateStr || !refDateStr) return;
-
-            const birthDate = new Date(birthDateStr);
-            const refDate = new Date(refDateStr);
-
-            if (isNaN(birthDate.getTime()) || isNaN(refDate.getTime())) {
-                resultBox.innerHTML = `<span class="empty-text animate-result">유효한 날짜를 선택해주세요.</span>`;
-                return;
+            // 초기 안내 문구 표시
+            function showEmpty() {
+                resultBox.innerHTML = `<span class="empty-text animate-result">${initialText}</span>`;
             }
 
-            let age = refDate.getFullYear() - birthDate.getFullYear();
-            const monthDiff = refDate.getMonth() - birthDate.getMonth();
+            // 만나이 계산 및 결과 노출 함수
+            function calculateAndDisplayAge() {
+                const birthDateStr = document.getElementById('birthDate').value;
+                const refDateStr = document.getElementById('refDate').value;
 
-            // 만나이 계산 적용 (생일 안 지났으면 -1)
-            if (monthDiff < 0 || (monthDiff === 0 && refDate.getDate() < birthDate.getDate())) {
-                age--;
-            }
+                if (!birthDateStr || !refDateStr) return;
 
-            let resultHtml = '';
+                const birthDate = new Date(birthDateStr);
+                const refDate = new Date(refDateStr);
 
-            if (age < 0) {
-                resultHtml = '<span class="empty-text">기준일이 생년월일보다 빠릅니다.</span>';
-            } else if (age >= 30 && age <= 60) {
-                resultHtml = `만 ${age}세로, <span class="eligible">위촉 가능</span>합니다.`;
-            } else {
-                resultHtml = `만 ${age}세로, <span class="ineligible">위촉 불가</span>합니다.`;
-            }
-
-            // 애니메이션과 함께 노출
-            resultBox.innerHTML = `<div class="animate-result">${resultHtml}</div>`;
-        }
-
-        // 지연 업데이트 로직 (확인버튼 클릭 시 매끄러운 0.2초 트랜지션 처리)
-        function scheduleUpdate() {
-            clearTimeout(updateTimer);
-
-            const bVal = document.getElementById('birthDate').value;
-            const rVal = document.getElementById('refDate').value;
-
-            if (bVal && rVal) {
-                // 계산 대기 중 잠시 비워두어 깔끔하게 전환 유도
-                resultBox.innerHTML = '';
-
-                updateTimer = setTimeout(() => {
-                    calculateAndDisplayAge();
-                }, 200);
-            }
-        }
-
-        // 드롭다운 옵션 동적 생성 함수
-        function populateSelects(yearId, monthId, dayId, startYear, endYear) {
-            const yearSelect = document.getElementById(yearId);
-            const monthSelect = document.getElementById(monthId);
-            const daySelect = document.getElementById(dayId);
-
-            // 연도 생성 (내림차순 정렬)
-            for (let y = endYear; y >= startYear; y--) {
-                const opt = document.createElement('option');
-                opt.value = y;
-                opt.textContent = `${y}년`;
-                yearSelect.appendChild(opt);
-            }
-
-            // 월 생성
-            for (let m = 1; m <= 12; m++) {
-                const opt = document.createElement('option');
-                opt.value = String(m).padStart(2, '0');
-                opt.textContent = `${m}월`;
-                monthSelect.appendChild(opt);
-            }
-
-            // 일수 업데이트 함수 (윤년 등 고려)
-            function updateDays() {
-                const selectedYear = parseInt(yearSelect.value);
-                const selectedMonth = parseInt(monthSelect.value);
-                const previousVal = daySelect.value;
-
-                // 기본 일수 선택 초기화
-                daySelect.innerHTML = '<option value="">일</option>';
-
-                if (!selectedYear || !selectedMonth) return;
-
-                const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const opt = document.createElement('option');
-                    opt.value = String(d).padStart(2, '0');
-                    opt.textContent = `${d}일`;
-                    daySelect.appendChild(opt);
+                if (isNaN(birthDate.getTime()) || isNaN(refDate.getTime())) {
+                    resultBox.innerHTML = `<span class="empty-text animate-result">유효한 날짜를 선택해주세요.</span>`;
+                    return;
                 }
 
-                // 이전에 선택했던 값이 유효하다면 값 유지
-                if (parseInt(previousVal) <= daysInMonth) {
-                    daySelect.value = previousVal;
+                let age = refDate.getFullYear() - birthDate.getFullYear();
+                const monthDiff = refDate.getMonth() - birthDate.getMonth();
+
+                // 만나이 계산 적용 (생일 안 지났으면 -1)
+                if (monthDiff < 0 || (monthDiff === 0 && refDate.getDate() < birthDate.getDate())) {
+                    age--;
                 }
-            }
 
-            yearSelect.addEventListener('change', updateDays);
-            monthSelect.addEventListener('change', updateDays);
-        }
+                let resultHtml = '';
 
-        // 패널 제어 로직 설정
-        function setupPicker(wrapperId, panelId, confirmId, textInputId, yearId, monthId, dayId, defaultValue = null) {
-            const wrapper = document.getElementById(wrapperId);
-            const panel = document.getElementById(panelId);
-            const confirmBtn = document.getElementById(confirmId);
-            const textInput = document.getElementById(textInputId);
-            const yearSelect = document.getElementById(yearId);
-            const monthSelect = document.getElementById(monthId);
-            const daySelect = document.getElementById(dayId);
-
-            // 값 적용 함수
-            function applyValue() {
-                const y = yearSelect.value;
-                const m = monthSelect.value;
-                const d = daySelect.value;
-
-                if (y && m && d) {
-                    textInput.value = `${y}-${m}-${d}`;
-                    scheduleUpdate(); // 0.2초 딜레이 스케줄링 실행
+                if (age < 0) {
+                    resultHtml = '<span class="empty-text">기준일이 생년월일보다 빠릅니다.</span>';
+                } else if (age >= 30 && age <= 60) {
+                    resultHtml = `만 ${age}세로, <span class="eligible">위촉 가능</span>합니다.`;
                 } else {
-                    textInput.value = '';
-                    showEmpty();
+                    resultHtml = `만 ${age}세로, <span class="ineligible">위촉 불가</span>합니다.`;
+                }
+
+                // 애니메이션과 함께 노출
+                resultBox.innerHTML = `<div class="animate-result">${resultHtml}</div>`;
+            }
+
+            // 지연 업데이트 로직 (확인버튼 클릭 시 매끄러운 0.2초 트랜지션 처리)
+            function scheduleUpdate() {
+                clearTimeout(updateTimer);
+                
+                const bVal = document.getElementById('birthDate').value;
+                const rVal = document.getElementById('refDate').value;
+                
+                if (bVal && rVal) {
+                    // 계산 대기 중 잠시 비워두어 깔끔하게 전환 유도
+                    resultBox.innerHTML = '';
+                    
+                    updateTimer = setTimeout(() => {
+                        calculateAndDisplayAge();
+                    }, 200);
                 }
             }
 
-            // 초기값이 지정된 경우 (기본으로 세팅되는 기준일 처리)
-            if (defaultValue) {
-                const [y, m, d] = defaultValue.split('-');
-                yearSelect.value = y;
-                monthSelect.value = m;
+            // 드롭다운 옵션 동적 생성 함수
+            function populateSelects(yearId, monthId, dayId, startYear, endYear) {
+                const yearSelect = document.getElementById(yearId);
+                const monthSelect = document.getElementById(monthId);
+                const daySelect = document.getElementById(dayId);
 
-                // 연도/월 선택에 맞추어 일 옵션을 동적으로 활성화 시켜준 뒤 일값(d) 적용
-                const event = new Event('change');
-                yearSelect.dispatchEvent(event);
-                daySelect.value = d;
+                // 연도 생성 (내림차순 정렬)
+                for (let y = endYear; y >= startYear; y--) {
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.textContent = `${y}년`;
+                    yearSelect.appendChild(opt);
+                }
 
-                textInput.value = `${y}-${m}-${d}`;
-                // 초기 로드 시 자동 나이 계산 대기
-                scheduleUpdate();
+                // 월 생성
+                for (let m = 1; m <= 12; m++) {
+                    const opt = document.createElement('option');
+                    opt.value = String(m).padStart(2, '0');
+                    opt.textContent = `${m}월`;
+                    monthSelect.appendChild(opt);
+                }
+
+                // 일수 업데이트 함수 (윤년 등 고려)
+                function updateDays() {
+                    const selectedYear = parseInt(yearSelect.value);
+                    const selectedMonth = parseInt(monthSelect.value);
+                    const previousVal = daySelect.value;
+
+                    // 기본 일수 선택 초기화
+                    daySelect.innerHTML = '<option value="">일</option>';
+                    
+                    if (!selectedYear || !selectedMonth) return;
+
+                    const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+                    for (let d = 1; d <= daysInMonth; d++) {
+                        const opt = document.createElement('option');
+                        opt.value = String(d).padStart(2, '0');
+                        opt.textContent = `${d}일`;
+                        daySelect.appendChild(opt);
+                    }
+
+                    // 이전에 선택했던 값이 유효하다면 값 유지
+                    if (parseInt(previousVal) <= daysInMonth) {
+                        daySelect.value = previousVal;
+                    }
+                }
+
+                yearSelect.addEventListener('change', updateDays);
+                monthSelect.addEventListener('change', updateDays);
             }
 
-            // 인풋 또는 래퍼 클릭 시 패널 열기
-            wrapper.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // 다른 열린 패널 모두 닫기
-                document.querySelectorAll('.picker-panel').forEach(p => {
-                    if (p !== panel) p.classList.remove('active');
+            // 패널 제어 로직 설정
+            function setupPicker(wrapperId, panelId, confirmId, textInputId, yearId, monthId, dayId, defaultValue = null) {
+                const wrapper = document.getElementById(wrapperId);
+                const panel = document.getElementById(panelId);
+                const confirmBtn = document.getElementById(confirmId);
+                const textInput = document.getElementById(textInputId);
+                const yearSelect = document.getElementById(yearId);
+                const monthSelect = document.getElementById(monthId);
+                const daySelect = document.getElementById(dayId);
+
+                // 값 적용 함수
+                function applyValue() {
+                    const y = yearSelect.value;
+                    const m = monthSelect.value;
+                    const d = daySelect.value;
+
+                    if (y && m && d) {
+                        textInput.value = `${y}-${m}-${d}`;
+                        scheduleUpdate(); // 0.2초 딜레이 스케줄링 실행
+                    } else {
+                        textInput.value = '';
+                        showEmpty();
+                    }
+                }
+
+                // 초기값이 지정된 경우 (기본으로 세팅되는 기준일 처리)
+                if (defaultValue) {
+                    const [y, m, d] = defaultValue.split('-');
+                    yearSelect.value = y;
+                    monthSelect.value = m;
+                    
+                    // 연도/월 선택에 맞추어 일 옵션을 동적으로 활성화 시켜준 뒤 일값(d) 적용
+                    const event = new Event('change');
+                    yearSelect.dispatchEvent(event);
+                    daySelect.value = d;
+                    
+                    textInput.value = `${y}-${m}-${d}`;
+                    // 초기 로드 시 자동 나이 계산 대기
+                    scheduleUpdate();
+                }
+
+                // 인풋 또는 래퍼 클릭 시 패널 열기
+                wrapper.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // 다른 열린 패널 모두 닫기
+                    document.querySelectorAll('.picker-panel').forEach(p => {
+                        if (p !== panel) p.classList.remove('active');
+                    });
+                    panel.classList.toggle('active');
                 });
-                panel.classList.toggle('active');
+
+                // 확인 버튼 클릭 시 패널을 닫고 데이터 적용 및 즉시 결과 갱신
+                confirmBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    panel.classList.remove('active');
+                    applyValue();
+                });
+            }
+
+            // 초기 안내 문구 최초 표시
+            showEmpty();
+
+            // 오늘 날짜 정보 구하기
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth() + 1;
+            const currentDay = today.getDate();
+
+            // 생년월일은 1930년~올해까지, 기준일은 2010년~2040년까지 범위 설정
+            populateSelects('birthYear', 'birthMonth', 'birthDay', 1930, currentYear);
+            populateSelects('refYear', 'refMonth', 'refDay', 2010, 2040);
+
+            // 오늘 날짜 문자열 구하기 (YYYY-MM-DD)
+            const todayStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`;
+
+            // 생년월일 피커 적용 (기본값 비워둠)
+            setupPicker('birthWrapper', 'birthPanel', 'birthConfirm', 'birthDate', 'birthYear', 'birthMonth', 'birthDay');
+            
+            // 기준일 피커 적용 (오늘 날짜가 항상 기본 설정되도록 명시적 처리)
+            setupPicker('refWrapper', 'refPanel', 'refConfirm', 'refDate', 'refYear', 'refMonth', 'refDay', todayStr);
+
+            // 외부 영역 클릭 시 열려 있는 패널 전체 닫기
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.picker-panel').forEach(p => p.classList.remove('active'));
             });
-
-            // 확인 버튼 클릭 시 패널을 닫고 데이터 적용 및 즉시 결과 갱신
-            confirmBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                panel.classList.remove('active');
-                applyValue();
+            
+            // 패널 내부 클릭했을 때 이벤트가 부모(document)로 번져서 꺼지는 현상 방지
+            document.querySelectorAll('.picker-panel').forEach(p => {
+                p.addEventListener('click', (e) => e.stopPropagation());
             });
-        }
-
-        // 초기 안내 문구 최초 표시
-        showEmpty();
-
-        // 오늘 날짜 정보 구하기
-        const today = new Date();
-        const currentYear = today.getFullYear();
-        const currentMonth = today.getMonth() + 1;
-        const currentDay = today.getDate();
-
-        // 생년월일은 1930년~올해까지, 기준일은 2010년~2040년까지 범위 설정
-        populateSelects('birthYear', 'birthMonth', 'birthDay', 1930, currentYear);
-        populateSelects('refYear', 'refMonth', 'refDay', 2010, 2040);
-
-        // 오늘 날짜 문자열 구하기 (YYYY-MM-DD)
-        const todayStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`;
-
-        // 생년월일 피커 적용 (기본값 비워둠)
-        setupPicker('birthWrapper', 'birthPanel', 'birthConfirm', 'birthDate', 'birthYear', 'birthMonth', 'birthDay');
-
-        // 기준일 피커 적용 (오늘 날짜가 항상 기본 설정되도록 명시적 처리)
-        setupPicker('refWrapper', 'refPanel', 'refConfirm', 'refDate', 'refYear', 'refMonth', 'refDay', todayStr);
-
-        // 외부 영역 클릭 시 열려 있는 패널 전체 닫기
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.picker-panel').forEach(p => p.classList.remove('active'));
         });
-
-        // 패널 내부 클릭했을 때 이벤트가 부모(document)로 번져서 꺼지는 현상 방지
-        document.querySelectorAll('.picker-panel').forEach(p => {
-            p.addEventListener('click', (e) => e.stopPropagation());
-        });
-    });
-</script>
-```
-
+    </script>
 </body>
 </html>
